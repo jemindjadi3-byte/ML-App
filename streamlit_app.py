@@ -1,5 +1,3 @@
-# App version 1
-
 import streamlit as st
 import pickle
 import numpy as np
@@ -22,8 +20,19 @@ def load_model():
     except FileNotFoundError:
         st.error("⚠️ Model file 'diabetes_model.pkl' not found. Please ensure it's in the same directory.")
         return None
+    except ModuleNotFoundError as e:
+        st.error(f"⚠️ Missing required module: {str(e)}")
+        st.info("""
+        **To fix this error, install the required package:**
+        ```
+        pip install scikit-learn
+        ```
+        Then restart the Streamlit app.
+        """)
+        return None
     except Exception as e:
         st.error(f"⚠️ Error loading model: {str(e)}")
+        st.info("This might be due to missing dependencies. Try installing: `pip install scikit-learn pandas numpy`")
         return None
 
 # App header
@@ -207,7 +216,3 @@ qualified health provider with any questions you may have regarding a medical co
 - **Diabetes Pedigree Function**: A function that represents genetic influence
 - **Age**: Age in years
 """)
-
-
-
-
